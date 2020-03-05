@@ -1,2 +1,0 @@
-# myHotel
-EC Java project

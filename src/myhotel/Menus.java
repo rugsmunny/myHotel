@@ -61,5 +61,33 @@ public abstract class Menus {
             }
         }
     }
+    
+    
+    public static String questionAndInputString(String question, Scanner input) {
+        String inputString;
+        while (true) {
+            System.out.print("\n" + question + ": ");
+            try {
+                inputString = input.nextLine();
+                if (!inputString.equals("")) {
+                    return inputString;
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+    }
+
+    public static int questionAndInputInt(String question, Scanner input) {
+        while (true) {
+            System.out.print("\n" + question + ": ");
+            try {
+                return Integer.parseInt(input.nextLine());
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
+    }
  
 }

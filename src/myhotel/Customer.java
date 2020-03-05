@@ -8,7 +8,7 @@ package myhotel;
 
 public class Customer {
     
-    int customerBill;
+    
     String billingDetails;
     int phoneNumber;
     String customerName;
@@ -20,14 +20,6 @@ public class Customer {
 
     public void setBillingDetails(String billingDetails) {
         this.billingDetails = billingDetails;
-    }
-
-    public int getCustomerBill() {
-        return customerBill;
-    }
-
-    public void setCustomerBill(int customerBill) {
-        this.customerBill = customerBill;
     }
 
     public int getPhoneNumber() {
@@ -55,7 +47,7 @@ public class Customer {
     }
 
     public Customer(int customerBill, int phoneNumber, String customerName, int roomNumber) {
-        this.customerBill = customerBill;
+      
         this.phoneNumber = phoneNumber;
         this.customerName = customerName;
         this.roomNumber = roomNumber;

@@ -40,6 +40,7 @@ public class MyHotel {
                 ourRooms.add(new HotelRoom(i+1, RoomType.Deluxe_Double_Room));
             }
         }
+        
        
         ourRooms.stream().forEach(System.out::println);
        

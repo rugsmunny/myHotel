@@ -24,6 +24,7 @@ public class MyHotel {
 
         int numberOfRooms = 40; 
        List<HotelRoom> ourRooms = new ArrayList<>();
+       List<Customer> customers = new ArrayList<>();
        
         for (int i = 0; i < numberOfRooms; i++) {
             if(i<(numberOfRooms*.25)){

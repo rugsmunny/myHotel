@@ -5,22 +5,30 @@
  */
 package myhotel;
 
+import java.util.HashMap;
+
 
 public class Customer {
     
     
-    String billingDetails;
-    int phoneNumber;
-    String customerName;
-    int roomNumber;
-    
-    public String getBillingDetails() {
+   
+    private int phoneNumber;
+    private String customerName;
+    private HashMap<String, Integer> billingDetails = new HashMap<>();
+
+    public HashMap<String, Integer> getBillingDetails() {
         return billingDetails;
     }
 
-    public void setBillingDetails(String billingDetails) {
+    public void setBillingDetails(HashMap<String, Integer> billingDetails) {
         this.billingDetails = billingDetails;
     }
+    @Override
+    public String toString() {
+        return "Name: " + customerName + ". Phone number: " + phoneNumber +"\nRoomNumber: " + roomNumber + ". Accumulated bill: " + billingDetails+"\n";
+    }
+    int roomNumber;
+    
 
     public int getPhoneNumber() {
         return phoneNumber;
@@ -46,7 +54,7 @@ public class Customer {
         this.roomNumber = roomNumber;
     }
 
-    public Customer(int customerBill, int phoneNumber, String customerName, int roomNumber) {
+    public Customer(String customerName,int phoneNumber,  int roomNumber) {
       
         this.phoneNumber = phoneNumber;
         this.customerName = customerName;

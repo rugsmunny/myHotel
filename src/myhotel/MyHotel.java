@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import static javax.swing.UIManager.put;
+import static myhotel.FoodMenu.menu;
 
 /**
  *
@@ -22,28 +23,25 @@ import static javax.swing.UIManager.put;
  */
 public class MyHotel {
 
-    /**
-     * @param args the command line arguments
-     */
+    public static boolean running = true;
+    public static boolean runningMenu = true;
+    public static int numberOfRooms = 40;
+    public static List<HotelRoom> ourRooms = new ArrayList<>();
+    public static List<Customer> customers = new ArrayList<>();
+    
+    
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-
-        LinkedHashMap<String, Integer> receptionistFoodMenu = new LinkedHashMap<>();
-        {
-            {
-
-                put("Pizza", 125);
-                put("Burger", 130);
-                put("Fish n Chips", 110);
-                put("Lasagna", 145);
-                put("Sallad", 100);
-
-            }
-        }
-
-        int numberOfRooms = 40;
-        List<HotelRoom> ourRooms = new ArrayList<>();
-        List<Customer> customers = new ArrayList<>();
+        
+        customers.add(new Customer("karim", 555555, 11));
+        customers.add(new Customer("leo", 555555, 12));
+        customers.add(new Customer("oskar", 555555, 13));
+        customers.add(new Customer("fia", 555555, 14));
+        customers.add(new Customer("linda", 555555, 15));
+        customers.add(new Customer("asif", 555555, 16));
+        customers.add(new Customer("abiat", 555555, 17));
+        customers.add(new Customer("beshlick", 555555, 18));
 
         for (int i = 0; i < numberOfRooms; i++) {
             if (i < (numberOfRooms * .25)) {
@@ -56,36 +54,81 @@ public class MyHotel {
                 ourRooms.add(new HotelRoom(i + 1, RoomType.Deluxe_Double_Room));
             }
         }
-        
-        List<HotelRoom> tempRoomList = new ArrayList<>();
-        
-        switch (Menus.choiceMethod(new String[]{"New customer", "Customer details", "Bookings", "Food menu", "Checkout"}, input, true)) {
-            case 1:
-                String tempName = Menus.questionAndInputString("Name", input);
-                int tempPhone = Menus.questionAndInputInt("Phonenumber", input);
-                switch (Menus.choiceMethod(new String[]{"Luxury Single Room", "Luxury Double Room", "Deluxe Single Room", "Deluxe Double Room"}, input, true)) {
-                    case 1:
-                        System.out.println(ourRooms.stream().filter(n -> (n.roomType == RoomType.Deluxe_Single_Room && n.booked == false )).findAny().get());
-                        break;
-                    case 2:
-                        ourRooms.stream().filter(n -> n.roomType == RoomType.Deluxe_Double_Room).forEach(System.out::println);
-                        break;
-                    case 3:
-                        ourRooms.stream().filter(n -> n.roomType == RoomType.Luxury_Single_Room).forEach(System.out::println);
-                        break;
-                    case 4:
-                        ourRooms.stream().filter(n -> n.roomType == RoomType.Luxury_Double_Room).forEach(System.out::println);
-                        break;
+        while (running) {
+            switch (Menus.choiceMethod(new String[]{"New customer", "Customer details", "Food menu", "Checkout"}, input, true)) {
+                case 1:
+                    String tempName = Menus.questionAndInputString("Name", input);
+                    int tempPhone = Menus.questionAndInputInt("Phonenumber", input);
+                    int tempRoomNumber = 0;
+
+                    switch (Menus.choiceMethod(new String[]{"Luxury Single Room", "Luxury Double Room", "Deluxe Single Room", "Deluxe Double Room"}, input, true)) {
+                        case 1:
+                            tempRoomNumber = BookRoom(RoomType.Deluxe_Single_Room);
+                            break;
+                        case 2:
+                            tempRoomNumber = BookRoom(RoomType.Deluxe_Double_Room);
+                            break;
+                        case 3:
+                            tempRoomNumber = BookRoom(RoomType.Luxury_Single_Room);
+                            break;
+                        case 4:
+                            tempRoomNumber = BookRoom(RoomType.Luxury_Double_Room);
+                            break;
+                    }
+                    customers.add(new Customer(tempName, tempPhone, tempRoomNumber));
+
+                    break;
+                case 2:
+                    customers.stream().forEach(System.out::println);
+                    break;
+                case 3:
+                    HashMap<String, Integer> tempOrder = new HashMap<>();
+                    while (runningMenu) {
+                        switch (Menus.choiceMethod(new String[]{"Pizza  -  115:-", "Lasagna  -  135:-", "Burger   -  95:-", "Water / Soda  -  25:-", "Chips  -  35:-", "Cookies  -  35:-"}, input, true)) {
+                            case 1:
+                                tempOrder.put("Pizza", 115);
+                                case2:
+                                tempOrder.put("Lasagna", 135);
+                                case3:
+                                tempOrder.put("Burger", 95);
+                                case4:
+                                tempOrder.put("Soda/Water", 25);
+                                case5:
+                                tempOrder.put("Chips", 25);
+                                case6:
+                                tempOrder.put("Cookies", 25);
+                        }
+                        System.out.println("Anything else?  Y/N? Choice: ");
+                        if(!input.next().contains("N")){
+                            runningMenu = true;
+                        } else {
+                            System.out.println("What roomnumber: ");
+                            //kontroll så inte obokade rum kan debiteras(?)
+                            
+                            customers = customers.stream().filter(c->(c.roomNumber==input.nextInt())).collect(Collectors.toList());
+                           //Uppdatera billingDetails på specifik kund utifrån rumsnummer 
+                            runningMenu = false;
                 }
-                
-                break;
-            case 2:
-                System.out.println("2");
-                break;
-            case 3:
-                System.out.println("3");
-                break;
+                        break;
+                    }
+                    break;
+                case 4:
+                    System.out.println("Checkout done, Bye Karim!");
+                    running = false;
+                    break;
+                case 9:
+                    System.out.println("Shutting down, have a nice day!");
+                    running = false;
+
+            }
+
         }
+    }
+
+    public static int BookRoom(RoomType r) {
+        HotelRoom tempRoom = ourRooms.stream().filter(n -> (n.roomType == r && n.booked == false)).findAny().get();
+        tempRoom.booked = true;
+        return tempRoom.roomNumber;
 
     }
 

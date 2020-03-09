@@ -14,15 +14,13 @@ public class Customer {
    
     private int phoneNumber;
     private String customerName;
-    private HashMap<String, Integer> billingDetails = new HashMap<>();
+    public HashMap<String, Integer> billingDetails = new HashMap<>();
 
     public HashMap<String, Integer> getBillingDetails() {
         return billingDetails;
     }
 
-    public void setBillingDetails(HashMap<String, Integer> billingDetails) {
-        this.billingDetails = billingDetails;
-    }
+ 
     @Override
     public String toString() {
         return "Name: " + customerName + ". Phone number: " + phoneNumber +"\nRoomNumber: " + roomNumber + ". Accumulated bill: " + billingDetails+"\n";

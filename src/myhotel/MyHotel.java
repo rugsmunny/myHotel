@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import static javax.swing.UIManager.put;
 import static myhotel.FoodMenu.menu;
@@ -28,12 +29,10 @@ public class MyHotel {
     public static int numberOfRooms = 40;
     public static List<HotelRoom> ourRooms = new ArrayList<>();
     public static List<Customer> customers = new ArrayList<>();
-    
-    
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        
+
         customers.add(new Customer("karim", 555555, 11));
         customers.add(new Customer("leo", 555555, 12));
         customers.add(new Customer("oskar", 555555, 13));
@@ -80,38 +79,69 @@ public class MyHotel {
                     break;
                 case 2:
                     customers.stream().forEach(System.out::println);
+                    switch (Menus.choiceMethod(new String[]{"Change customer details", "Upgrade"}, input, true)) {
+
+                        case 1:
+                            int tempRoomNum = Menus.questionAndInputInt("Room number", input);
+                            customers.stream().filter(c -> (c.roomNumber == tempRoomNum)).findAny().get().setCustomerName(Menus.questionAndInputString("Name", input));
+                            customers.stream().filter(c -> (c.roomNumber == tempRoomNum)).findAny().get().setPhoneNumber(Menus.questionAndInputInt("Phone number", input));
+                            break;
+                        case 2:
+                           int newRoom = 0;
+                            tempRoomNum = Menus.questionAndInputInt("Room number", input);
+                            System.out.print("Your current room type is " + ourRooms.get(tempRoomNum-1) + ".\nWhat room type would you like to choose: ");
+                            switch (Menus.choiceMethod(new String[]{"Luxury Single Room", "Luxury Double Room", "Deluxe Single Room", "Deluxe Double Room"}, input, true)) {
+                                case 1:
+                                    newRoom = BookRoom(RoomType.Deluxe_Single_Room);
+                                    break;
+                                case 2:
+                                    newRoom = BookRoom(RoomType.Deluxe_Double_Room);
+                                    break;
+                                case 3:
+                                    newRoom = BookRoom(RoomType.Luxury_Single_Room);
+                                    break;
+                                case 4:
+                                    newRoom = BookRoom(RoomType.Luxury_Double_Room);
+                                    break;
+                            }
+                            customers.stream().filter(c -> c.roomNumber == tempRoomNum).findAny().get().setRoomNumber(newRoom);
+
+                            break;
+                    }
                     break;
                 case 3:
                     HashMap<String, Integer> tempOrder = new HashMap<>();
-                    while (runningMenu) {
+                    while (true) {
                         switch (Menus.choiceMethod(new String[]{"Pizza  -  115:-", "Lasagna  -  135:-", "Burger   -  95:-", "Water / Soda  -  25:-", "Chips  -  35:-", "Cookies  -  35:-"}, input, true)) {
                             case 1:
-                                tempOrder.put("Pizza", 115);
-                                case2:
-                                tempOrder.put("Lasagna", 135);
-                                case3:
-                                tempOrder.put("Burger", 95);
-                                case4:
-                                tempOrder.put("Soda/Water", 25);
-                                case5:
-                                tempOrder.put("Chips", 25);
-                                case6:
-                                tempOrder.put("Cookies", 25);
+                                tempOrder.compute("Pizza", (k, v) -> (v == null) ? 115 : v + 115);
+                                break;
+                            case 2:
+                                tempOrder.compute("Lasagna", (k, v) -> (v == null) ? 135 : v + 135);
+                                break;
+                            case 3:
+                                tempOrder.compute("Burger", (k, v) -> (v == null) ? 95 : v + 95);
+                                break;
+                            case 4:
+                                tempOrder.compute("Soda/Water", (k, v) -> (v == null) ? 25 : v + 25);
+                                break;
+                            case 5:
+                                tempOrder.compute("Chips", (k, v) -> (v == null) ? 35 : v + 35);
+                                break;
+                            case 6:
+                                tempOrder.compute("Cookies", (k, v) -> (v == null) ? 35 : v + 35);
+                                break;
                         }
-                        System.out.println("Anything else?  Y/N? Choice: ");
-                        if(!input.next().contains("N")){
-                            runningMenu = true;
-                        } else {
-                            System.out.println("What roomnumber: ");
-                            //kontroll så inte obokade rum kan debiteras(?)
-                            
-                            customers = customers.stream().filter(c->(c.roomNumber==input.nextInt())).collect(Collectors.toList());
-                           //Uppdatera billingDetails på specifik kund utifrån rumsnummer 
-                            runningMenu = false;
-                }
-                        break;
+
+                        if (Menus.questionAndInputString("Anything else?  Y/N? Choice", input).toLowerCase().contains("n")) {
+                            int tempRoomNum = Menus.questionAndInputInt("Room number", input);
+                            customers.stream().filter(c -> (c.roomNumber == tempRoomNum)).findAny().get().billingDetails.putAll(tempOrder); //Uppdatera billingDetails på specifik kund utifrån rumsnummer 
+                            customers.stream().forEach(System.out::println);
+                            break;
+
+                        }
                     }
-                    break;
+
                 case 4:
                     System.out.println("Checkout done, Bye Karim!");
                     running = false;

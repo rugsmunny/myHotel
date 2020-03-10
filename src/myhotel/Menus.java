@@ -5,6 +5,7 @@
  */
 package myhotel;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -89,5 +90,7 @@ public abstract class Menus {
         }
 
     }
+    
+    
  
 }

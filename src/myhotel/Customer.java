@@ -5,30 +5,29 @@
  */
 package myhotel;
 
+import java.util.HashMap;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
     
-    int customerBill;
-    String billingDetails;
-    int phoneNumber;
-    String customerName;
-    int roomNumber;
     
-    public String getBillingDetails() {
+   
+    private int phoneNumber;
+    private String customerName;
+    public HashMap<String, Integer> billingDetails = new HashMap<>();
+
+    public HashMap<String, Integer> getBillingDetails() {
         return billingDetails;
     }
 
-    public void setBillingDetails(String billingDetails) {
-        this.billingDetails = billingDetails;
+ 
+    @Override
+    public String toString() {
+        return "Name: " + customerName + ". Phone number: " + phoneNumber +"\nRoomNumber: " + roomNumber + ". Accumulated bill: " + billingDetails+"\n";
     }
-
-    public int getCustomerBill() {
-        return customerBill;
-    }
-
-    public void setCustomerBill(int customerBill) {
-        this.customerBill = customerBill;
-    }
+    int roomNumber;
+    
 
     public int getPhoneNumber() {
         return phoneNumber;
@@ -54,8 +53,8 @@ public class Customer {
         this.roomNumber = roomNumber;
     }
 
-    public Customer(int customerBill, int phoneNumber, String customerName, int roomNumber) {
-        this.customerBill = customerBill;
+    public Customer(String customerName,int phoneNumber,  int roomNumber) {
+      
         this.phoneNumber = phoneNumber;
         this.customerName = customerName;
         this.roomNumber = roomNumber;

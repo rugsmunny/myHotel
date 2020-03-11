@@ -7,6 +7,7 @@ package myhotel;
 
 import java.util.HashMap;
 import java.util.Scanner;
+import static myhotel.MyHotel.customers;
 
 /**
  *
@@ -91,6 +92,40 @@ public abstract class Menus {
 
     }
     
+    public static void foodMenu(){
+        HashMap<String, Integer> tempOrder = new HashMap<>();
+        Scanner input = MyHotel.input;
+        while (true) {  
+        
+            switch (choiceMethod(new String[]{"Pizza  -  115:-", "Lasagna  -  135:-", "Burger   -  95:-", "Water / Soda  -  25:-", "Chips  -  35:-", "Cookies  -  35:-"}, input, true)) {
+                case 1:
+                    tempOrder.compute("Pizza", (k, v) -> (v == null) ? 115 : v + 115);
+                    break;
+                case 2:
+                    tempOrder.compute("Lasagna", (k, v) -> (v == null) ? 135 : v + 135);
+                    break;
+                case 3:
+                    tempOrder.compute("Burger", (k, v) -> (v == null) ? 95 : v + 95);
+                    break;
+                case 4:
+                    tempOrder.compute("Soda/Water", (k, v) -> (v == null) ? 25 : v + 25);
+                    break;
+                case 5:
+                    tempOrder.compute("Chips", (k, v) -> (v == null) ? 35 : v + 35);
+                    break;
+                case 6:
+                    tempOrder.compute("Cookies", (k, v) -> (v == null) ? 35 : v + 35);
+                    break;
+            }
+            if (Menus.questionAndInputString("Anything else?  Y/N? Choice", input).toLowerCase().contains("n")) {
+                int tempRoomNum = Menus.questionAndInputInt("Room number", input);
+                customers.stream().filter(c -> (c.roomNumber == tempRoomNum)).findAny().get().billingDetails.putAll(tempOrder); //Uppdatera billingDetails på specifik kund utifrån rumsnummer 
+                customers.stream().forEach(System.out::println);
+                break;
+
+            }
+
+        }
     
- 
+    }
 }

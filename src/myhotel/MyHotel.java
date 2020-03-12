@@ -118,7 +118,14 @@ public class MyHotel {
     }
 
     public static int BookRoom(RoomType r) {
-        HotelRoom tempRoom = ourRooms.stream().filter(n -> (n.roomType == r && n.booked == false)).findAny().get();
+        HotelRoom tempRoom = null; 
+        for (Customer c : customers){
+            tempRoom = ourRooms.stream().filter(n -> (n.roomNumber == c.roomNumber && r == n.roomType)).findAny().get();
+            if(tempRoom != null){
+                break;
+            }
+        }
+        
         tempRoom.booked = true;
         return tempRoom.roomNumber;
 

@@ -14,8 +14,8 @@ import static myhotel.MyHotel.customers;
  * @author admusr
  */
 public abstract class Menus {
-    
-    public static String ListChoices(String[] choices){
+
+    public static String ListChoices(String[] choices) {
         String question = "";
         for (int i = 0; i < choices.length; i++) {
             question += "\n" + (i + 1) + ". " + choices[i];
@@ -23,6 +23,7 @@ public abstract class Menus {
         }
         return question;
     }
+
     public static int choiceMethod(String[] choices, Scanner input, boolean back) {
         int choice;
         while (true) {
@@ -32,7 +33,7 @@ public abstract class Menus {
             question = ListChoices(choices);
 
             if (back == true) {
-                if (choices[0].equals("Add employee")) {
+                if (choices[0].equals("New customer")) {
                     question += "\n0. Exit";
                 } else {
                     question += "\n0. Back";
@@ -47,24 +48,22 @@ public abstract class Menus {
             try {
                 choice = Integer.parseInt(input.nextLine());
                 if (choice <= choices.length && choice >= 0) {
-                    if(choice == 0 && back == true){
+                    if (choice == 0 && back == true) {
                         return choice;
                     }
-                    if (choice == 0 && back == false){
+                    if (choice == 0 && back == false) {
                         continue;
                     }
                     return choice;
                 }
-               
-                
+
             } catch (NumberFormatException e) {
                 System.out.println("\nError. Please try again.");
 
             }
         }
     }
-    
-    
+
     public static String questionAndInputString(String question, Scanner input) {
         String inputString;
         while (true) {
@@ -91,12 +90,28 @@ public abstract class Menus {
         }
 
     }
-    
-    public static void foodMenu(){
+
+    public static void foodMenu() {
         HashMap<String, Integer> tempOrder = new HashMap<>();
         Scanner input = MyHotel.input;
-        while (true) {  
+        int tempRoomNum = 0;
         
+        
+        
+        do {
+            tempRoomNum = Menus.questionAndInputInt("Room number", input);
+            
+        } while (tempRoomNum <= 0 || tempRoomNum > MyHotel.numberOfRooms);
+        
+        int tempRoomNum2 = tempRoomNum;
+        Customer cust = customers.stream().filter(c-> c.roomNumber == tempRoomNum2).findAny().get();
+        
+        
+        
+        
+
+        while (true) {
+
             switch (choiceMethod(new String[]{"Pizza  -  115:-", "Lasagna  -  135:-", "Burger   -  95:-", "Water / Soda  -  25:-", "Chips  -  35:-", "Cookies  -  35:-"}, input, true)) {
                 case 1:
                     tempOrder.compute("Pizza", (k, v) -> (v == null) ? 115 : v + 115);
@@ -117,15 +132,15 @@ public abstract class Menus {
                     tempOrder.compute("Cookies", (k, v) -> (v == null) ? 35 : v + 35);
                     break;
             }
-            if (Menus.questionAndInputString("Anything else?  Y/N? Choice", input).toLowerCase().contains("n")) {
-                int tempRoomNum = Menus.questionAndInputInt("Room number", input);
-                customers.stream().filter(c -> (c.roomNumber == tempRoomNum)).findAny().get().billingDetails.putAll(tempOrder); //Uppdatera billingDetails på specifik kund utifrån rumsnummer 
-                customers.stream().forEach(System.out::println);
+            if (choiceMethod(new String[] {"Add more", "Done"}, input, false) == 2){
                 break;
-
             }
+                
 
         }
-    
+        
+
+        customers.stream().filter(c -> (c.roomNumber == cust.roomNumber)).findAny().get().billingDetails.putAll(tempOrder); //
+
     }
 }

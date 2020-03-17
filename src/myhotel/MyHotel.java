@@ -41,9 +41,8 @@ public class MyHotel {
 
         Menus.LoadHotelRooms();
 
-        LoadBookedRooms();
-        while (true) {
-
+        while (running) { 
+            runningMenu = true;
             user = Menus.chooseUserType();
 
             Menus.primaryMenu();
@@ -59,12 +58,5 @@ public class MyHotel {
 
     }
 
-    public static void LoadBookedRooms() {
-
-        for (Customer c : customers) {
-           ourRooms.stream().filter(hr -> (hr.roomNumber == c.roomNumber)).map(r->r.booked = true);
-
-        }
-    }
 
 }

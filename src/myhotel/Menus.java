@@ -20,6 +20,7 @@ import static myhotel.MyHotel.input;
 import static myhotel.MyHotel.numberOfRooms;
 import static myhotel.MyHotel.ourRooms;
 import static myhotel.MyHotel.running;
+import static myhotel.MyHotel.runningMenu;
 import static myhotel.MyHotel.user;
 
 /**
@@ -46,7 +47,7 @@ public abstract class Menus {
             question = ListChoices(choices);
 
             if (back == true) {
-                if (choices[0].equals("New customer")) {
+                if (choices[0].equals("Staff")) {
                     question += "\n0. Exit";
                 } else {
                     question += "\n0. Back";
@@ -190,7 +191,7 @@ public abstract class Menus {
     }
 
     public static User chooseUserType() {
-        switch (Menus.choiceMethod(new String[]{"Staff", "Customer"}, input, false)) {
+        switch (Menus.choiceMethod(new String[]{"Staff", "Customer"}, input, true)) {
 
             case 1:
                 user = User.Staff;
@@ -199,6 +200,10 @@ public abstract class Menus {
             case 2:
                 user = User.Customer;
                 break;
+                
+            case 0:
+                running = false;
+                runningMenu = false;
         }
         return user;
     }
@@ -269,11 +274,15 @@ public abstract class Menus {
                 ourRooms.add(new HotelRoom(i + 1, RoomType.Deluxe_Double_Room));
             }
         }
+        for (Customer c : customers) {
+           ourRooms.stream().filter(hr -> (hr.roomNumber == c.roomNumber)).map(r->r.booked = true);
+
+        }
     }
 
     static void primaryMenu() {
-        while (running) {
-
+        
+        while (runningMenu == true){
             switch (Menus.choiceMethod(user == User.Staff ? new String[]{"New customer", "Food menu", "Checkout", "Customer details"} : new String[]{"New customer", "Food menu", "Checkout"}, input, true)) {
                 case 1:
                     Menus.inputCustomerDetails();
@@ -294,12 +303,16 @@ public abstract class Menus {
                     break;
                 case 0:
                     System.out.println("Shutting down, have a nice day!");
-                    running = false;
+                    
                     FileManagement.SaveCustomerData();
+                    runningMenu = false;
+                    
+                    
 
             }
         }
     }
+    
 
     private static void checkOutCustomer() {
         while (true) {

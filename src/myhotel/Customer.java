@@ -8,6 +8,7 @@ package myhotel;
 import java.util.HashMap;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 
 public class Customer implements Serializable {
     
@@ -15,9 +16,9 @@ public class Customer implements Serializable {
    
     private int phoneNumber;
     private String customerName;
-    public HashMap<String, Integer> billingDetails = new HashMap<>();
+    public LinkedHashMap<String, Integer> billingDetails = new LinkedHashMap<>();
 
-    public HashMap<String, Integer> getBillingDetails() {
+    public LinkedHashMap<String, Integer> getBillingDetails() {
         return billingDetails;
     }
 

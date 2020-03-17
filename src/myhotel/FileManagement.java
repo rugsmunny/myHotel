@@ -9,6 +9,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import static myhotel.MyHotel.customers;
 
@@ -34,7 +36,7 @@ public class FileManagement {
 
     
     public static List<Customer> GetCustomerData() {
-    
+        List<Customer> customers = new ArrayList<>(); 
         try {
 
             FileInputStream fileIn = new FileInputStream("customersData.txt");
@@ -47,10 +49,11 @@ public class FileManagement {
             return list;
 
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            //ex.printStackTrace();
+            System.out.println(Collections.<Customer>emptyList());
+            return customers;
         }
-            
+
     }
 }
 

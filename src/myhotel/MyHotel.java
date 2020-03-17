@@ -23,7 +23,7 @@ enum User {
 }
 
 public class MyHotel {
-
+    public static int roomSelected;
     public static boolean running = true;
     public static boolean runningMenu = true;
     public static int numberOfRooms = 40;

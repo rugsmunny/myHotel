@@ -28,6 +28,7 @@ import static myhotel.MyHotel.user;
  * @author admusr
  */
 public abstract class Menus {
+    private static int roomSelected;
 
     public static String ListChoices(String[] choices) {
         String question = "";
@@ -158,7 +159,7 @@ public abstract class Menus {
     }
     private static void setOrderToRoomNum(Scanner input, HashMap<String, Integer> tempOrder) {
         while (true) {
-            int roomNum = checkIfRoomIsBooked();
+            int roomNum = selectRoom();
             if (customers.stream().anyMatch(c -> (c.roomNumber == roomNum))) {
                 customers.stream().filter(c -> (c.roomNumber == roomNum)).findAny().get().billingDetails.putAll(tempOrder);
                 System.out.println("Order has been set to room #: " + roomNum);
@@ -223,10 +224,10 @@ public abstract class Menus {
         switch (Menus.choiceMethod(new String[]{"Change customer details", "Change room"}, input, true)) {
 
             case 1:
-                updateCustomerDetails(checkIfRoomIsBooked());
+                updateCustomerDetails(selectRoom());
                 break;
             case 2:
-                updateRoomType(checkIfRoomIsBooked());
+                updateRoomType(selectRoom());
 
                 break;
 
@@ -246,13 +247,15 @@ public abstract class Menus {
         customers.stream().filter(c -> c.roomNumber == tempRoomNum).findAny().get().setRoomNumber(Menus.chooseRoomType());
     }
 
-    public static int checkIfRoomIsBooked() {
-        Customer temp;
+    public static int selectRoom() {
         while (true) {
             displayRooms();
             int tempRoom = Menus.questionAndInputInt("Room number", input);
+            if (customers.isEmpty()){
+                return 0;
+            }
             if (customers.stream().anyMatch(c -> c.roomNumber == tempRoom)) {
-                temp = customers.stream().filter(c -> c.roomNumber == tempRoom).findAny().get();
+
 
                 return tempRoom;
             }
@@ -281,26 +284,23 @@ public abstract class Menus {
     }
 
     static void primaryMenu() {
-        
+        if (customers.isEmpty()){
+            inputCustomerDetails();
+        }
         while (runningMenu == true){
-            switch (Menus.choiceMethod(user == User.Staff ? new String[]{"New customer", "Food menu", "Checkout", "Customer details"} : new String[]{"New customer", "Food menu", "Checkout"}, input, true)) {
+            switch (Menus.choiceMethod(user == User.Staff ? new String[]{"New customer", "Checkout", "Staying Customer"} : new String[]{"New customer", "Checkout"}, input, true)) {
                 case 1:
                     Menus.inputCustomerDetails();
 
                     break;
+         
                 case 2:
-
-                    Menus.foodMenu();
-
-                    break;
-
-                case 3:
                     checkOutCustomer();
                     break;
+                    
+                case 3:
+                    s
 
-                case 4:
-                    Menus.changeCustomerDetailsAndRoomType();
-                    break;
                 case 0:
                     System.out.println("Shutting down, have a nice day!");
                     
@@ -313,12 +313,17 @@ public abstract class Menus {
         }
     }
     
+    static void stayingCustomer(){
+        
+    }
+    
 
     private static void checkOutCustomer() {
         while (true) {
 
-            int checkOutRoom = Menus.checkIfRoomIsBooked();
+            int checkOutRoom = Menus.selectRoom();
             Customer customer = null;
+            System.out.println(ourRooms.stream().filter(r-> r.roomNumber == checkOutRoom).findAny().get().booked);
             if (customers.stream().anyMatch(c -> (c.roomNumber == checkOutRoom))) {
                 customer = customers.stream().filter(c -> (c.roomNumber == checkOutRoom)).findAny().get();
                 HotelRoom tempRoom = ourRooms.stream().filter(n -> (n.roomNumber == checkOutRoom && n.booked == true)).findAny().get();

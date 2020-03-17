@@ -25,7 +25,7 @@ public class FileManagement {
             ObjectOutputStream listOut = new ObjectOutputStream(fileOut);
             listOut.writeObject(customers);
             listOut.close();
-            System.out.println("The Object  was succesfully written to a file");
+            System.out.println("\nThe Object  was succesfully written to a file");
 
         } catch (Exception ex) {
             ex.printStackTrace();

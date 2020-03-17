@@ -5,7 +5,11 @@
  */
 package myhotel;
 
+import java.awt.Menu;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import java.util.HashMap;
 
@@ -41,6 +45,9 @@ public class MyHotel {
                 ourRooms.add(new HotelRoom(i + 1, RoomType.Deluxe_Double_Room));
             }
         }
+
+        LoadBookedRooms();
+
         while (running) {
             switch (Menus.choiceMethod(new String[]{"New customer", "Customer details", "Food menu", "Checkout"}, input, true)) {
                 case 1:
@@ -48,7 +55,7 @@ public class MyHotel {
                     int tempPhone = Menus.questionAndInputInt("Phonenumber", input);
                     int tempRoomNumber = 0;
 
-                    switch (Menus.choiceMethod(new String[]{"Luxury Single Room", "Luxury Double Room", "Deluxe Single Room", "Deluxe Double Room"}, input, true)) {
+                    switch (Menus.choiceMethod(new String[]{"Luxury Single Room", "Luxury Double Room", "Deluxe Single Room", "Deluxe Double Room"}, input, false)) {
                         case 1:
                             tempRoomNumber = BookRoom(RoomType.Deluxe_Single_Room);
                             break;
@@ -97,27 +104,29 @@ public class MyHotel {
                             break;
 
                     }
+
+                    break;
+
                 case 3:
                     Menus.foodMenu();
                     break;
 
                 case 4:
-                    System.out.println("Checkout done, Bye Karim!");
-                    FileManagement.SaveCustomerData();
-                    running = false;
+                    checkOutCustomer(true);
+
                     break;
-                case 9:
+                case 0:
                     System.out.println("Shutting down, have a nice day!");
                     running = false;
+                    FileManagement.SaveCustomerData();
 
             }
         }
-        ourRooms.stream()
-                .forEach(System.out::println);
 
     }
 
     public static int BookRoom(RoomType r) {
+
         HotelRoom tempRoom = null; 
         for (Customer c : customers){
             tempRoom = ourRooms.stream().filter(n -> (n.roomNumber == c.roomNumber && r == n.roomType)).findAny().get();
@@ -125,9 +134,42 @@ public class MyHotel {
                 break;
             }
         }
-        
+
         tempRoom.booked = true;
         return tempRoom.roomNumber;
 
     }
+
+    public static void LoadBookedRooms() {
+
+        for (Customer c : customers) {
+            HotelRoom check = ourRooms.stream().filter(hr -> (hr.roomNumber == c.roomNumber)).findAny().get();
+            check.booked = true;
+
+        }
+    }
+
+    private static void checkOutCustomer(boolean b) {
+        while (b) {
+
+            int checkOutRoom = Menus.roomNumberController(input, running);
+            Customer customer = null;
+            if (customers.stream().anyMatch(c -> (c.roomNumber == checkOutRoom))) {
+                customer = customers.stream().filter(c -> (c.roomNumber == checkOutRoom)).findAny().get();
+                HotelRoom tempRoom = ourRooms.stream().filter(n -> (n.roomNumber == checkOutRoom && n.booked == true)).findAny().get();
+                tempRoom.booked = false;
+                b = false;
+//räkna ihop total skuld - visa "kvitto"
+                System.out.println("\nCheckout done, Bye " + customer.getCustomerName() + "!");
+                customers.remove(customer);
+            } else {
+                System.out.println("Something went wrong. Please try again.");
+            }
+
+        }
+
+        FileManagement.SaveCustomerData();
+
+    }
+
 }

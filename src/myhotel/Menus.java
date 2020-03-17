@@ -94,6 +94,7 @@ public abstract class Menus {
     public static void foodMenu() {
         HashMap<String, Integer> tempOrder = new HashMap<>();
         Scanner input = MyHotel.input;
+
         int tempRoomNum = 0;
         
         
@@ -110,7 +111,17 @@ public abstract class Menus {
         
         
 
-        while (true) {
+        boolean b = true;
+
+        printFoodMenu(input, tempOrder, b);
+
+        setOrderToRoomNum(input, tempOrder, b);
+
+    }
+
+    private static HashMap printFoodMenu(Scanner input, HashMap<String, Integer> tempOrder, boolean b) {
+        while (b) {
+
 
             switch (choiceMethod(new String[]{"Pizza  -  115:-", "Lasagna  -  135:-", "Burger   -  95:-", "Water / Soda  -  25:-", "Chips  -  35:-", "Cookies  -  35:-"}, input, true)) {
                 case 1:
@@ -131,16 +142,52 @@ public abstract class Menus {
                 case 6:
                     tempOrder.compute("Cookies", (k, v) -> (v == null) ? 35 : v + 35);
                     break;
-            }
+
+                case 0:
+                    break;
+                }
+
             if (choiceMethod(new String[] {"Add more", "Done"}, input, false) == 2){
                 break;
+            }
+        }
+        return tempOrder;
+    }
+
+    public static int roomNumberController(Scanner input, boolean b) {
+        int roomNum = 0;
+        while (b) {
+            roomNum = Menus.questionAndInputInt("Room number", input);
+            if (roomNum > 0 && roomNum < 41) {
+
+                b = false;
+
+            } else {
+                System.out.println("Something went wrong, please try again.");
+
+
             }
                 
 
         }
-        
 
-        customers.stream().filter(c -> (c.roomNumber == cust.roomNumber)).findAny().get().billingDetails.putAll(tempOrder); //
+        return roomNum;
+    }
+
+    private static void setOrderToRoomNum(Scanner input, HashMap<String, Integer> tempOrder, boolean b) {
+        while (b) {
+            int roomNum = roomNumberController(input, true);
+
+            if (customers.stream().anyMatch(c -> (c.roomNumber == roomNum))) {
+                customers.stream().filter(c -> (c.roomNumber == roomNum)).findAny().get().billingDetails.putAll(tempOrder);
+                System.out.println("Order has been set to room #: " + roomNum);
+                b = false;
+
+            } else {
+                System.out.println("Something went wrong, please try again.");
+
+            }
+        }
 
     }
 }

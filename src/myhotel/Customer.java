@@ -8,7 +8,9 @@ package myhotel;
 import java.util.HashMap;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Customer implements Serializable {
     
@@ -16,16 +18,16 @@ public class Customer implements Serializable {
    
     private int phoneNumber;
     private String customerName;
-    public LinkedHashMap<String, Integer> billingDetails = new LinkedHashMap<>();
+    public List<Order> billingDetails = new ArrayList<>();
 
-    public LinkedHashMap<String, Integer> getBillingDetails() {
+    public List<Order> getBillingDetails() {
         return billingDetails;
     }
 
  
     @Override
     public String toString() {
-        return "Name: " + customerName + ". Phone number: " + phoneNumber +"\nRoomNumber: " + roomNumber + ". Accumulated bill: " + billingDetails+"\n";
+        return "Name: " + customerName + ". Phone number: " + phoneNumber +"\nRoomNumber: " + roomNumber;
     }
     int roomNumber;
     

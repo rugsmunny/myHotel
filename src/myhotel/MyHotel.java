@@ -26,37 +26,30 @@ public class MyHotel {
     public static int roomSelected;
     public static boolean running = true;
     public static boolean runningMenu = true;
-    public static int numberOfRooms = 40;
+    public static int numberOfRooms = 4;
     public static List<HotelRoom> ourRooms = new ArrayList<>();
     public static List<Customer> customers = new ArrayList<>();
     public static Scanner input = new Scanner(System.in);
     public static User user;
+    public static int selectedRoom;
 
     public static void main(String[] args) {
 
-        customers = FileManagement.GetCustomerData(); 
-
-        
-        
+        customers = FileManagement.GetCustomerData();
 
         Menus.LoadHotelRooms();
 
+
         while (running) { 
+            
+            
             runningMenu = true;
             user = Menus.chooseUserType();
 
             Menus.primaryMenu();
         }
 
-    }
-
-    public static int BookRoom(RoomType r) {
-
-        HotelRoom tempRoom = ourRooms.stream().filter(n -> (n.roomType == r && n.booked == false)).findAny().get();
-        tempRoom.booked = true;
-        return tempRoom.roomNumber;
 
     }
-
 
 }

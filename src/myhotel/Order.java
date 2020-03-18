@@ -5,14 +5,19 @@
  */
 package myhotel;
 
+
 import java.io.Serializable;
+
 import java.util.Date;
 
 /**
  *
  * @author karim
  */
+
 public class Order implements Serializable{
+
+
     Date date;
     int cost;
     String productName;

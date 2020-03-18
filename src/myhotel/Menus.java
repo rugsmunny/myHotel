@@ -156,10 +156,12 @@ public abstract class Menus {
 
         }
 
+
         if (kvitto.isEmpty() != true){
             customers.stream().filter(c -> (c.roomNumber == MyHotel.selectedRoom)).findAny().get().billingDetails.addAll(kvitto);
 
         }       
+
 
     }
 
@@ -188,6 +190,7 @@ public abstract class Menus {
                 case 0:
                     return 0;
             }
+
 
             if (temp != 0) {
                 return temp;
@@ -238,10 +241,10 @@ public abstract class Menus {
     public static void changeCustomerDetailsAndRoomType() {
         customers.stream().forEach(System.out::println);
 
+
         switch (Menus.choiceMethod(new String[]{"Check details", "Change room"}, input, true)) {
 
             case 1:
-
                 boolean running = true;
                 while (running) {
 
@@ -292,7 +295,6 @@ public abstract class Menus {
                 return 0;
             }
             if (customers.stream().anyMatch(c -> c.roomNumber == tempRoom)) {
-
 
                 return tempRoom;
 
@@ -355,7 +357,6 @@ public abstract class Menus {
     public static void displayRooms() {
         customers.stream().forEach(c -> System.out.println("-" + " " + c.toString()));
     }
-
     public static int BookRoom(RoomType r) {
 
         try {
@@ -413,13 +414,11 @@ public abstract class Menus {
     private static void stayingCustomers() {
 
 
-
         boolean running = true;
         MyHotel.selectedRoom = selectRoom();
         while (running) {
             System.out.println("Selected room is: " + MyHotel.selectedRoom);
             switch (Menus.choiceMethod(user == User.Staff ? new String[]{"Food menu", "Checkout", "Customer details"} : new String[]{"Food menu"}, input, true)) {
-
 
                 case 1:
                     Menus.foodMenu();
